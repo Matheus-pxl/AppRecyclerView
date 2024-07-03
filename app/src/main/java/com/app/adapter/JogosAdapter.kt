@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.databinding.ItemListaJogosBinding
 import com.app.model.Jogo
 
-// Classe principal do adaptador que estende RecyclerView.Adapter
+// Classe principal do adaptador que extende RecyclerView.Adapter
 class JogosAdapter(private val listaJogos: ArrayList<Jogo>) : RecyclerView.Adapter<JogosAdapter.JogoViewHolder>() {
 
     // Método chamado quando o RecyclerView precisa criar um novo ViewHolder

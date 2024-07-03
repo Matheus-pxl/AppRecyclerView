@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">AppRecyclerView</string>
     <string name="detalhes">Detalhes</string>
+    <string name="produtora_do_jogo">Produtora do jogo</string>
+    <string name="nome_do_jogo">Nome do jogo</string>
+    <string name="console">Console:</string>
+    <string name="finalizado">Finalizado</string>
+
+    <string-array name="consoles">
+        <item>Super Nintendo</item>
+        <item>Atari Jaguar</item>
+        <item>XBox-One</item>
+        <item>Play Station 4</item>
+        <item>Computador</item>
+        <item>Mega Drive</item>
+        <item>Sega Saturn</item>
+    </string-array>
 </resources>
