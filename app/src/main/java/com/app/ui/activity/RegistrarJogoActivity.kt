@@ -10,6 +10,7 @@ class RegistrarJogoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTitle("Registrar jogo")
         binding = ActivityRegistrarJogoBinding.inflate(layoutInflater) // Inflar o layout usando o binding
         setContentView(binding.root) // Definir o layout root do binding como o conteúdo da activity
 
