@@ -18,6 +18,7 @@
             android:layout_height="100dp"
             android:layout_margin="8dp"
             android:scaleType="centerCrop"
+            tools:src="@color/grey"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -55,6 +56,7 @@
             android:scaleX="0.7"
             android:scaleY="0.7"
             android:stepSize="0.5"
+            android:progressTint="@color/red"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textConsole"/>
         <Button
