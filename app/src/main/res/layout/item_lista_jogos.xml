@@ -31,9 +31,9 @@
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
             android:textSize="24sp"
-            tools:text="nome do jogo"/>
+            tools:text="Nome do jogo"/>
         <TextView
-            android:id="@+id/nome_console_lista"
+            android:id="@+id/textConsole"
             android:layout_width="0dp"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
@@ -56,15 +56,14 @@
             android:scaleY="0.7"
             android:stepSize="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nome_console_lista"/>
+            app:layout_constraintTop_toBottomOf="@id/textConsole"/>
         <Button
             android:id="@+id/bt_detalhes"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="Detalhes"
-            android:layout_margin="8dp"
+            android:text="@string/detalhes"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
