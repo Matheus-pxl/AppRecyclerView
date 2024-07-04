@@ -4,6 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lightBlue">#0066FF</color>
     <color name="grey">#858585</color>
+    <color name="purple">#753DA6</color>
     <color name="red">#FF0000</color>
-
+    <color name="colorPrimary">#0A9400</color>
+    <color name="colorPrimaryDark">#035200</color>
+    <color name="colorAccent">#D60F00</color>
 </resources>

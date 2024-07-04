@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.fabCadastrarNovoJogo.setOnClickListener(this)
     }
 
+
     private fun iniciarRecyclerView() {
 //para o layout ficar horizontal
 //        binding.recyclerViewJogos.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View) {
         if(v.id == R.id.fab_cadastrar_novo_jogo){
-            val intent = Intent(this, RegistrarJogoActivity::class.java)
+            val intent = Intent(this, CadastrarJogoActivity::class.java)
             startActivity(intent)
         }
     }
