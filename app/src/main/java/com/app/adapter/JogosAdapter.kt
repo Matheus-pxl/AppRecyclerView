@@ -32,7 +32,7 @@ class JogosAdapter(private val listaJogos: ArrayList<Jogo>) : RecyclerView.Adapt
         // Método que vincula os dados do objeto Jogo aos elementos do layout usando ViewBinding
         fun bind(jogo: Jogo) {
             binding.textConsole.text = jogo.console // Define o texto do console do jogo
-            binding.nomeJogoLista.text = jogo.nomeJogo // Define o nome do jogo
+            binding.nomeJogoLista.text = jogo.titulo // Define o nome do jogo
             binding.notaJogo.rating = jogo.notaJogo // Define a nota do jogo (rating)
         }
     }

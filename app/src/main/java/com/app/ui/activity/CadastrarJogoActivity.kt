@@ -4,27 +4,45 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import com.app.R
-import com.app.databinding.ActivityRegistrarJogoBinding // Importe a classe de binding
+import com.app.databinding.ActivityCadastrarJogoBinding
+import com.app.model.Jogo
+import com.app.repository.JogoRepository
 
 class CadastrarJogoActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityRegistrarJogoBinding // Declare o binding como lateinit
+    private lateinit var binding: ActivityCadastrarJogoBinding // Declare o binding como lateinit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTitle("Registrar jogo")
         binding =
-            ActivityRegistrarJogoBinding.inflate(layoutInflater) // Inflar o layout usando o binding
+            ActivityCadastrarJogoBinding.inflate(layoutInflater) // Inflar o layout usando o binding
         setContentView(binding.root) // Definir o layout root do binding como o conteúdo da activity
 
-        salvarJogo()
+        btSalvar()
+    }
+
+    private fun btSalvar() {
+        binding.btSalvarJogo.setOnClickListener {
+            if(validarFormulario()){
+                salvarJogo()
+                finish()
+            }
+        }
     }
 
     private fun salvarJogo() {
-        binding.btSalvarJogo.setOnClickListener {
-            if(validarFormulario()){
-
-            }
-        }
+        val jogo = Jogo(
+            0,
+            titulo = binding.editTextNomeJogo.text.toString(),
+            produtora = binding.editTextProdutoraJogo.text.toString(),
+            notaJogo = binding.ratingBarNotaJogo.rating,
+            console = binding.spinnerConsole.selectedItem.toString(),
+            zerado = binding.checkboxFinalizado.isChecked
+        )
+        //criar uma instancia do repositorio
+        val repo = JogoRepository(this)
+        val id = repo.save(jogo)
+        println("registro criado ###########: $id")
     }
 
     private fun validarFormulario(): Boolean {
