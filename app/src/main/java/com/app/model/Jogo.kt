@@ -1,7 +1,7 @@
 package com.app.model
 
 data class Jogo(
-    var codigo: Int,
+    var id: Int,
     var titulo: String,
     var produtora:String,
     var notaJogo: Float,

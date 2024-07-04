@@ -42,7 +42,6 @@ class CadastrarJogoActivity : AppCompatActivity() {
         //criar uma instancia do repositorio
         val repo = JogoRepository(this)
         val id = repo.save(jogo)
-        println("registro criado ###########: $id")
     }
 
     private fun validarFormulario(): Boolean {

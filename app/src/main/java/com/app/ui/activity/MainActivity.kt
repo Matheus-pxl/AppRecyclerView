@@ -9,6 +9,7 @@ import com.app.R
 import com.app.adapter.JogosAdapter
 import com.app.databinding.ActivityMainBinding
 import com.app.datasource.Datasource
+import com.app.repository.JogoRepository
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMainBinding // Declaração do binding
@@ -18,16 +19,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setTitle("Jogos finalizados")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        iniciarRecyclerView()
         binding.fabCadastrarNovoJogo.setOnClickListener(this)
     }
 
+    override fun onResume() {
+        super.onResume()
+        iniciarRecyclerView()
+
+    }
 
     private fun iniciarRecyclerView() {
 //para o layout ficar horizontal
 //        binding.recyclerViewJogos.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
         binding.recyclerViewJogos.layoutManager = LinearLayoutManager(this)
-        binding.recyclerViewJogos.adapter = JogosAdapter(Datasource.getJogos())
+        val repo = JogoRepository(this)
+        binding.recyclerViewJogos.adapter = JogosAdapter(repo.getJogos())
     }
 
     override fun onClick(v: View) {
