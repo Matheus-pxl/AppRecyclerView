@@ -37,18 +37,27 @@ class JogoRepository(context: Context) {
     @SuppressLint("Range")
     fun getJogos(): ArrayList<Jogo> {
         val db = dbHelper.readableDatabase
+      //definir os campos que serao devolvidos na consulta
+        val projection = arrayOf(
+            DatabaseDefinitions.Jogo.Columns.ID,
+            DatabaseDefinitions.Jogo.Columns.TITULO,
+            DatabaseDefinitions.Jogo.Columns.CONSOLE,
+            DatabaseDefinitions.Jogo.Columns.NOTA,
+
+            )
+        //definir a ordem de exibição da lista, ordenar pelo nome do jogo
+        val sortOrder = "${DatabaseDefinitions.Jogo.Columns.TITULO} ASC"
+
         val cursor =
-            db.query(DatabaseDefinitions.Jogo.TABLE_NAME, null, null, null, null, null, null)
+            db.query(DatabaseDefinitions.Jogo.TABLE_NAME, projection, null, null, null, null, sortOrder)
         var jogos = ArrayList<Jogo>()
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 var jogo = Jogo(
-                    cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.PRODUTORA)),
-                    cursor.getFloat(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA)),
-                    cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE)),
-                    cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ZERADO)) == 1
+                    id= cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID)),
+                    titulo = cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO)),
+                    console = cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE)),
+                    notaJogo = cursor.getFloat(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA))
                 )
                 jogos.add(jogo)
 
