@@ -11,62 +11,110 @@ class JogoRepository(context: Context) {
     private val dbHelper = DatabaseHelper(context)
 
     fun save(jogo: Jogo): Int {
-        //colocar o banco em modo ESCRITA
         val db = dbHelper.writableDatabase
-        //criar um mapa com os valores que serao inseridos
-        val valores = ContentValues()
-        valores.put(DatabaseDefinitions.Jogo.Columns.TITULO, jogo.titulo)
-        valores.put(DatabaseDefinitions.Jogo.Columns.PRODUTORA, jogo.produtora)
-        valores.put(DatabaseDefinitions.Jogo.Columns.NOTA, jogo.notaJogo)
-        valores.put(DatabaseDefinitions.Jogo.Columns.CONSOLE, jogo.console)
-        valores.put(DatabaseDefinitions.Jogo.Columns.ZERADO, jogo.zerado)
-
-        //inserir os dados no banco
+        val valores = ContentValues().apply {
+            put(DatabaseDefinitions.Jogo.Columns.TITULO, jogo.titulo)
+            put(DatabaseDefinitions.Jogo.Columns.PRODUTORA, jogo.produtora)
+            put(DatabaseDefinitions.Jogo.Columns.NOTA, jogo.notaJogo)
+            put(DatabaseDefinitions.Jogo.Columns.CONSOLE, jogo.console)
+            put(DatabaseDefinitions.Jogo.Columns.ZERADO, jogo.zerado)
+        }
         val id = db.insert(DatabaseDefinitions.Jogo.TABLE_NAME, null, valores)
         return id.toInt()
     }
 
-    fun update(jogo: Jogo) {
-
+    fun update(jogo: Jogo): Int {
+        val db = dbHelper.writableDatabase
+        val valores = ContentValues().apply {
+            put(DatabaseDefinitions.Jogo.Columns.TITULO, jogo.titulo)
+            put(DatabaseDefinitions.Jogo.Columns.PRODUTORA, jogo.produtora)
+            put(DatabaseDefinitions.Jogo.Columns.NOTA, jogo.notaJogo)
+            put(DatabaseDefinitions.Jogo.Columns.CONSOLE, jogo.console)
+            put(DatabaseDefinitions.Jogo.Columns.ZERADO, jogo.zerado)
+        }
+        val selection = "${DatabaseDefinitions.Jogo.Columns.ID} = ?"
+        val selectionArgs = arrayOf(jogo.id.toString())
+        val count = db.update(DatabaseDefinitions.Jogo.TABLE_NAME, valores, selection, selectionArgs)
+        return count
     }
 
-    fun delete(id: Int) {
-
+    fun delete(id: Int): Int {
+        val db = dbHelper.writableDatabase
+        val selection = "${DatabaseDefinitions.Jogo.Columns.ID} = ?"
+        val selectionArgs = arrayOf(id.toString())
+        val deleteRows = db.delete(DatabaseDefinitions.Jogo.TABLE_NAME, selection, selectionArgs)
+        return deleteRows
     }
 
     @SuppressLint("Range")
     fun getJogos(): ArrayList<Jogo> {
         val db = dbHelper.readableDatabase
-      //definir os campos que serao devolvidos na consulta
         val projection = arrayOf(
             DatabaseDefinitions.Jogo.Columns.ID,
             DatabaseDefinitions.Jogo.Columns.TITULO,
             DatabaseDefinitions.Jogo.Columns.CONSOLE,
             DatabaseDefinitions.Jogo.Columns.NOTA,
-
-            )
-        //definir a ordem de exibição da lista, ordenar pelo nome do jogo
+        )
         val sortOrder = "${DatabaseDefinitions.Jogo.Columns.TITULO} ASC"
-
-        val cursor =
-            db.query(DatabaseDefinitions.Jogo.TABLE_NAME, projection, null, null, null, null, sortOrder)
-        var jogos = ArrayList<Jogo>()
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                var jogo = Jogo(
-                    id= cursor.getInt(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID)),
-                    titulo = cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO)),
-                    console = cursor.getString(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE)),
-                    notaJogo = cursor.getFloat(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA))
+        val cursor = db.query(
+            DatabaseDefinitions.Jogo.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            sortOrder
+        )
+        val jogos = ArrayList<Jogo>()
+        cursor?.use {
+            while (it.moveToNext()) {
+                val jogo = Jogo(
+                    id = it.getInt(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID)),
+                    titulo = it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO)),
+                    console = it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE)),
+                    notaJogo = it.getFloat(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA)),
+                    produtora = "", // Adicione a produtora aqui conforme necessário
+                    zerado = false // Adicione o valor correto conforme necessário
                 )
                 jogos.add(jogo)
-
             }
         }
         return jogos
     }
 
-    fun getJogo(id: Int) {
-
+    @SuppressLint("Range")
+    fun getJogo(id: Int): Jogo {
+        val db = dbHelper.readableDatabase
+        val projection = arrayOf(
+            DatabaseDefinitions.Jogo.Columns.ID,
+            DatabaseDefinitions.Jogo.Columns.TITULO,
+            DatabaseDefinitions.Jogo.Columns.PRODUTORA,
+            DatabaseDefinitions.Jogo.Columns.NOTA,
+            DatabaseDefinitions.Jogo.Columns.CONSOLE,
+            DatabaseDefinitions.Jogo.Columns.ZERADO
+        )
+        val selection = "${DatabaseDefinitions.Jogo.Columns.ID} = ?"
+        val selectionArgs = arrayOf(id.toString())
+        val cursor = db.query(
+            DatabaseDefinitions.Jogo.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+        var jogo = Jogo()
+        cursor?.use {
+            if (it.moveToNext()) {
+                jogo.id = it.getInt(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID))
+                jogo.titulo = it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO))
+                jogo.produtora = it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.PRODUTORA))
+                jogo.notaJogo = it.getFloat(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA))
+                jogo.console = it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE))
+                jogo.zerado = it.getInt(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ZERADO)) == 1
+            }
+        }
+        return jogo
     }
 }

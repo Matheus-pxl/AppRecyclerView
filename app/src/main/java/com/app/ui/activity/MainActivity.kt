@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.R
 import com.app.adapter.JogosAdapter
+import com.app.constants.Constants
 import com.app.databinding.ActivityMainBinding
-import com.app.datasource.Datasource
 import com.app.repository.JogoRepository
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -20,14 +20,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.fabCadastrarNovoJogo.setOnClickListener(this)
-    }
 
+    }
     override fun onResume() {
         super.onResume()
         iniciarRecyclerView()
 
     }
-
     private fun iniciarRecyclerView() {
 //para o layout ficar horizontal
 //        binding.recyclerViewJogos.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
@@ -39,6 +38,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
         if(v.id == R.id.fab_cadastrar_novo_jogo){
             val intent = Intent(this, CadastrarJogoActivity::class.java)
+            intent.putExtra("operacao",Constants.OPERACAO_NOVO_CADASTRO)
             startActivity(intent)
         }
     }
