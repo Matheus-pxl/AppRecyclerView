@@ -3,9 +3,13 @@ package com.app.repository
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.provider.ContactsContract.Data
 import com.app.datasource.DatabaseDefinitions
 import com.app.datasource.DatabaseHelper
 import com.app.model.Jogo
+import java.io.ByteArrayOutputStream
 
 class JogoRepository(context: Context) {
     private val dbHelper = DatabaseHelper(context)
@@ -18,7 +22,14 @@ class JogoRepository(context: Context) {
             put(DatabaseDefinitions.Jogo.Columns.NOTA, jogo.notaJogo)
             put(DatabaseDefinitions.Jogo.Columns.CONSOLE, jogo.console)
             put(DatabaseDefinitions.Jogo.Columns.ZERADO, jogo.zerado)
+
+            //transformar o bitmap em um array de bytes
+            val stream = ByteArrayOutputStream()
+            jogo.imagem!!.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            val imagemArray = stream.toByteArray()
+            put(DatabaseDefinitions.Jogo.Columns.IMAGEM, imagemArray)
         }
+
         val id = db.insert(DatabaseDefinitions.Jogo.TABLE_NAME, null, valores)
         return id.toInt()
     }
@@ -34,7 +45,8 @@ class JogoRepository(context: Context) {
         }
         val selection = "${DatabaseDefinitions.Jogo.Columns.ID} = ?"
         val selectionArgs = arrayOf(jogo.id.toString())
-        val count = db.update(DatabaseDefinitions.Jogo.TABLE_NAME, valores, selection, selectionArgs)
+        val count =
+            db.update(DatabaseDefinitions.Jogo.TABLE_NAME, valores, selection, selectionArgs)
         return count
     }
 
@@ -91,7 +103,8 @@ class JogoRepository(context: Context) {
             DatabaseDefinitions.Jogo.Columns.PRODUTORA,
             DatabaseDefinitions.Jogo.Columns.NOTA,
             DatabaseDefinitions.Jogo.Columns.CONSOLE,
-            DatabaseDefinitions.Jogo.Columns.ZERADO
+            DatabaseDefinitions.Jogo.Columns.ZERADO,
+            DatabaseDefinitions.Jogo.Columns.IMAGEM
         )
         val selection = "${DatabaseDefinitions.Jogo.Columns.ID} = ?"
         val selectionArgs = arrayOf(id.toString())
@@ -108,13 +121,31 @@ class JogoRepository(context: Context) {
         cursor?.use {
             if (it.moveToNext()) {
                 jogo.id = it.getInt(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ID))
-                jogo.titulo = it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO))
-                jogo.produtora = it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.PRODUTORA))
-                jogo.notaJogo = it.getFloat(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA))
-                jogo.console = it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE))
-                jogo.zerado = it.getInt(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ZERADO)) == 1
+                jogo.titulo =
+                    it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.TITULO))
+                jogo.produtora =
+                    it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.PRODUTORA))
+                jogo.notaJogo =
+                    it.getFloat(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.NOTA))
+                jogo.console =
+                    it.getString(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.CONSOLE))
+                jogo.zerado =
+                    it.getInt(it.getColumnIndex(DatabaseDefinitions.Jogo.Columns.ZERADO)) == 1
+                val imagem =
+                    cursor.getBlob(cursor.getColumnIndex(DatabaseDefinitions.Jogo.Columns.IMAGEM))
+
+                if (imagem != null) {
+                    jogo.imagem = byteArrayToBitmap(imagem)
+
+                }
+
             }
         }
         return jogo
+    }
+
+    private fun byteArrayToBitmap(imagem: ByteArray): Bitmap {
+        val bitmap = BitmapFactory.decodeByteArray(imagem, 0, imagem.size)
+        return bitmap
     }
 }

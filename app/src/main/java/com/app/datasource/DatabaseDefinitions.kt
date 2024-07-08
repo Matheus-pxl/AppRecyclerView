@@ -11,6 +11,7 @@ class DatabaseDefinitions {
             const val NOTA ="nota"
             const val CONSOLE ="console"
             const val ZERADO ="zerado"
+            const val IMAGEM = "imagem"
 
         }
     }
