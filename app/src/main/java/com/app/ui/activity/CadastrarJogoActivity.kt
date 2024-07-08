@@ -1,8 +1,12 @@
 package com.app.ui.activity
 
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.app.R
 import com.app.constants.Constants
@@ -10,7 +14,7 @@ import com.app.databinding.ActivityCadastrarJogoBinding
 import com.app.model.Jogo
 import com.app.repository.JogoRepository
 
-class CadastrarJogoActivity : AppCompatActivity() {
+class CadastrarJogoActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityCadastrarJogoBinding // Declare o binding como lateinit
     private lateinit var adapter:ArrayAdapter<CharSequence>
     private lateinit var operacao:String
@@ -28,6 +32,7 @@ class CadastrarJogoActivity : AppCompatActivity() {
         if(operacao != Constants.OPERACAO_NOVO_CADASTRO){
             preencherFormulario()
         }
+        binding.inserirImagem.setOnClickListener(this)
     }
 
     private fun preencherSpinnerConsole() {
@@ -120,5 +125,26 @@ class CadastrarJogoActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_game, menu)
         return true
     }
+
+    override fun onClick(view: View) {
+        val id = view.id
+        when(id){
+            R.id.inserir_imagem ->{
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "image/*"
+                startActivityForResult(intent,5000)
+            }
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(data != null){
+            val inputStream = contentResolver.openInputStream(data.data!!)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            binding.imageViewFotoJogo.scaleType = ImageView.ScaleType.CENTER_CROP
+            binding.imageViewFotoJogo.setImageBitmap(bitmap)
+        }
+    }
+
 
 }

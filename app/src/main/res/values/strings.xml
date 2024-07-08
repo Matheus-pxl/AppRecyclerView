@@ -5,6 +5,8 @@
     <string name="nome_do_jogo">Nome do jogo</string>
     <string name="console">Console:</string>
     <string name="finalizado">Finalizado</string>
+    <string name="nota">Nota</string>
+    <string name="salvar">Salvar</string>
 
     <string-array name="consoles">
         <item>Super Nintendo</item>
